@@ -1,10 +1,21 @@
 name: Deploy to GKE
 
 on:
-  push:
-    branches: ["main"]
+#   push:
+#     branches: ["main"]
 
   workflow_dispatch: 
+    inputs: 
+      docker_image: 
+        description: 'Provide docker repo'
+        required: true
+        default: ''
+
+      image_tag: 
+        description: 'Provide image tag'
+        required: true
+        default: ''
+
 
 jobs:
   setup-build-publish:
@@ -40,7 +51,7 @@ jobs:
 
     - name: Deploy
       run: |
-        helm upgrade --install my-release ./hello --set repository.image=smbek/python-app1 --set repository.tag=2.0.0
+        helm upgrade --install my-release ./hello --set repository.image=${{ inputs.docker_image }} --set repository.tag=${{ inputs.image_tag }}
         
        
       
